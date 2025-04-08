@@ -2,7 +2,6 @@
   "name": "card-savings-calculator",
   "version": "1.0.0",
   "description": "Card Spending to Savings Calculator",
-  "homepage": "https://mohsinfd.github.io/magicpin-cardgenius",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
@@ -23,7 +22,7 @@
     "styled-components": "^6.1.16"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "gh-pages": "^6.1.1"
   },
   "browserslist": {
     "production": [

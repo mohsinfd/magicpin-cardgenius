@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import { getCardRecommendations } from './api/cardsApi';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 const AppContainer = styled.div`
@@ -113,6 +113,7 @@ const App = () => {
               </AppContainer>
             } />
             <Route path="/amazon-cards" element={<AmazonCardResults />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </MainContent>
         <Footer />
