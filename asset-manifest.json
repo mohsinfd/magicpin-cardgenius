@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/magicpin-cardgenius/static/css/main.e7cea875.css",
+    "main.js": "/magicpin-cardgenius/static/js/main.fcbbe79f.js",
+    "index.html": "/magicpin-cardgenius/index.html",
+    "main.e7cea875.css.map": "/magicpin-cardgenius/static/css/main.e7cea875.css.map",
+    "main.fcbbe79f.js.map": "/magicpin-cardgenius/static/js/main.fcbbe79f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e7cea875.css",
+    "static/js/main.fcbbe79f.js"
+  ]
+}
