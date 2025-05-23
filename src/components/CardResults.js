@@ -684,9 +684,11 @@ const CardResults = ({ cards, onReset, isLoading, error, category, formData, onA
 
   const renderCard = (card, index, isTopCard) => (
     <CardContainer key={card.id} $isTopCard={isTopCard}>
-      <RankLabel rank={index + 1}>
-        {index === 0 ? 'Best Card' : `#${index + 1}`}
-      </RankLabel>
+      {isTopCard && (
+        <RankLabel rank={index + 1}>
+          {index === 0 ? 'Best Card' : `#${index + 1}`}
+        </RankLabel>
+      )}
       <div style={{ position: 'relative' }}>
         <CardImage
           src={card.image}
