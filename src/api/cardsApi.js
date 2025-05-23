@@ -1,6 +1,14 @@
 import axios from 'axios';
 
-const API_URL = 'https://bk-api.bankkaro.com/sp/api/cards';
+const STAGING_BASE_API_URL = 'https://bk-api.bankkaro.com/sp/api';
+// const PROD_BASE_API_URL = 'https://bk-prod-external.bankkaro.com/sp/api';
+const CURRENT_BASE_URL = STAGING_BASE_API_URL; // Reverted to staging
+
+const API_ENDPOINTS = {
+  // Endpoint for spend-based recommendations AND all cards (differentiated by payload)
+  CARDS: `${CURRENT_BASE_URL}/cards`,
+  ELIGIBILITY: `${CURRENT_BASE_URL}/cg-eligiblity` 
+};
 
 /**
  * Prepares payload for API request based on category and spending data
@@ -188,10 +196,10 @@ export const getCardRecommendations = async (category, spendingData) => {
     }
     
     const payload = preparePayload(category, spendingData);
-    console.log(`Making API request to ${API_URL}`);
+    console.log(`Making API request to ${API_ENDPOINTS.CARDS}`);
     console.log('Request payload:', JSON.stringify(payload, null, 2));
     
-    const response = await axios.post(API_URL, payload, {
+    const response = await axios.post(API_ENDPOINTS.CARDS, payload, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -230,6 +238,65 @@ export const getCardRecommendations = async (category, spendingData) => {
   }
 };
 
+// New API function to get all cards
+export const getAllCards = async () => {
+  const payload = {
+    "slug": "", // Slug is empty for this call to /cards
+    "banks_ids": [],
+    "card_networks": [],
+    "annualFees": "",
+    "credit_score": "",
+    "sort_by": "recommended",
+    "free_cards": "",
+    "eligiblityPayload": "", 
+    "cardGeniusPayload": "" 
+  };
+
+  try {
+    console.log(`Making getAllCards API request to ${API_ENDPOINTS.CARDS}`);
+    const response = await axios.post(API_ENDPOINTS.CARDS, payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('getAllCards API response:', response.data);
+
+    // Prioritize response.data.data.filteredCards if it exists and is an array
+    if (response.data && response.data.data && Array.isArray(response.data.data.filteredCards)) {
+      console.log('getAllCards: Using filteredCards from API response.');
+      return { data: { cards: response.data.data.filteredCards } }; 
+    }
+    // Fallback to response.data.data.cards if filteredCards is not found or not an array
+    else if (response.data && response.data.data && Array.isArray(response.data.data.cards)) {
+      console.log('getAllCards: Using cards from API response as filteredCards not found/valid.');
+      return { data: { cards: response.data.data.cards } }; 
+    }
+    // Fallback for flatter structures if .data.data is not present but .data.cards (array) is
+    else if (response.data && Array.isArray(response.data.cards)) {
+      console.log('getAllCards: Using response.data.cards (flatter structure).');
+      return { data: { cards: response.data.cards } }; 
+    } 
+    // Fallback if response.data is directly the array of cards
+    else if (Array.isArray(response.data)) { 
+        console.log('getAllCards: Using response.data as cards array (direct array response).');
+        return { data: { cards: response.data } }; 
+    }
+    else {
+      console.error('getAllCards: Unexpected API response structure:', response.data);
+      return { data: { cards: [] }, error: 'Unexpected API response structure' };
+    }
+  } catch (error) {
+    console.error('Error fetching all cards:', error.response ? error.response.data : error.message);
+    throw error; 
+  }
+};
+
+// Assuming EligibilityModal.js also uses an API call that needs this base URL update.
+// If EligibilityModal directly constructs its URL, that file would also need an update.
+// For now, adding a general constant that could be imported if needed elsewhere.
+export const BASE_API_URL_FOR_ELIGIBILITY = API_ENDPOINTS.ELIGIBILITY;
+
 export default {
-  getCardRecommendations
+  getCardRecommendations,
+  getAllCards
 }; 

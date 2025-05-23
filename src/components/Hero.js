@@ -15,9 +15,9 @@ const floatAnimation = keyframes`
 
 const HeroContainer = styled.div`
   display: ${props => props.$isVisible ? 'block' : 'none'};
-  background: #2e108e;
+  background: var(--primary-color);
   padding: 4rem 2rem;
-  color: white;
+  color: var(--text-on-dark-bg);
   text-align: left;
   position: relative;
   overflow: hidden;
@@ -50,7 +50,7 @@ const Title = styled.h1`
   margin-bottom: 1rem;
   font-weight: 700;
   line-height: 1.2;
-  color: white;
+  color: var(--text-on-dark-bg);
 
   @media (max-width: 768px) {
     font-size: 2.25rem;
@@ -62,7 +62,7 @@ const Subtitle = styled.p`
   margin-bottom: 2rem;
   opacity: 0.9;
   line-height: 1.6;
-  color: white;
+  color: var(--text-on-dark-bg);
 
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -101,7 +101,7 @@ const Card = styled.div`
     left: 20px;
     width: 45px;
     height: 35px;
-    background: #FFD700;
+    background: var(--accent-orange);
     border-radius: 6px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
   }
@@ -130,7 +130,7 @@ const Card = styled.div`
   &:nth-child(2) {
     top: 20px;
     left: 20px;
-    background: linear-gradient(135deg, #2e108e, #3f1cb8);
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
     animation-delay: -1.5s;
     z-index: 2;
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -139,7 +139,7 @@ const Card = styled.div`
   &:nth-child(3) {
     top: 40px;
     left: 40px;
-    background: linear-gradient(135deg, #ef1c71, #ff3b8b);
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-orange));
     animation-delay: -0.75s;
     z-index: 1;
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -176,8 +176,8 @@ const HeroImage = styled.img`
 
 const Hero = ({ 
   isVisible = true,
-  title = "Find Your Perfect Credit Card with MagicPin",
-  subtitle = "Get personalized credit card recommendations based on your spending habits and maximize your rewards",
+  title = "Find the Best Credit Card for Your Business",
+  subtitle = "Simplify your financial journey and earn rewards with the right Tide credit card.",
   imageUrl = null
 }) => {
   return (

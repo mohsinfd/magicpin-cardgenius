@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 
 const HeaderContainer = styled.header`
-  background: #2e108e;
+  background: white;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(46, 16, 142, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -24,7 +24,7 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-color);
   cursor: pointer;
   
   img {
@@ -49,7 +49,7 @@ const MenuItems = styled.div`
 
 const MenuItem = styled.a`
   text-decoration: none;
-  color: white;
+  color: var(--text-color);
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 6px;

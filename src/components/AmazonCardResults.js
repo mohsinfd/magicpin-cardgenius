@@ -6,43 +6,38 @@ import Hero from './Hero';
 import { getCardRecommendations } from '../api/cardsApi';
 
 const AmazonContainer = styled.div`
-  background: #f3f3f3;
+  background: var(--light-gray);
   min-height: 100vh;
 `;
 
 const StyledCardResults = styled.div`
+  /* These styles will now be primarily handled by CardResults.js with CSS variables */
+  /* We can add more specific overrides here if needed for Amazon page */
   .card-container {
-    border: 1px solid #e0e0e0;
-    transition: all 0.3s ease;
-
+    /* Example: border: 1px solid var(--medium-gray); */
     &:hover {
-      border-color: #febd69;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      /* Example: border-color: var(--secondary-color); */
     }
   }
 
   .card-title {
-    color: #232f3e;
-    
+    /* Example: color: var(--primary-color); */
     &:hover {
-      color: #febd69;
+      /* Example: color: var(--secondary-color); */
     }
   }
 
   .apply-button {
-    background: #232f3e;
-    color: white;
-    border: none;
-    
+    /* Example: background: var(--secondary-color); */
+    /* Example: color: var(--text-on-dark-bg); */
     &:hover {
-      background: #37475a;
+      /* Example: background: var(--primary-light); */
     }
   }
 
   .rank-label {
-    &.rank-1 { background: #febd69; }
-    &.rank-2 { background: #37475a; }
-    &.rank-3 { background: #232f3e; }
+    /* Rank label styling is complex, might need to ensure it uses new vars if customized here */
+    /* Otherwise, CardResults.js handles it */
   }
 `;
 
@@ -153,9 +148,9 @@ const AmazonCardResults = () => {
     <AmazonContainer>
       {!showResults && (
         <Hero
-          isAmazon={true}
-          title="Find the best card for shopping on Amazon"
-          subtitle="Maximize your Amazon shopping rewards with our specially curated selection of Amazon credit cards"
+          isVisible={true}
+          title="Best Tide Cards for Amazon Shopping"
+          subtitle="Maximize your rewards on Amazon with specially selected Tide credit cards."
         />
       )}
       

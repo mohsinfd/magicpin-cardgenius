@@ -5,25 +5,21 @@ const Container = styled.div`
   padding: 2rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: var(--light-gray);
 `;
 
 const Title = styled.h2`
   text-align: center;
   font-size: 2rem;
   margin-bottom: 2.5rem;
-  color: #1a1a1a;
+  color: var(--primary-color);
   font-weight: 700;
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 `;
 
 const CategoryCard = styled.button`
@@ -32,11 +28,11 @@ const CategoryCard = styled.button`
   align-items: center;
   padding: 2rem 1.5rem;
   background: white;
-  border: none;
-  border-radius: 16px;
+  border: 1px solid var(--medium-gray);
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  box-shadow: var(--shadow);
   text-align: center;
   height: 100%;
   min-height: 240px;
@@ -54,7 +50,7 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0052FF10 0%, #0052FF20 100%);
+  background: linear-gradient(135deg, var(--secondary-color)10 0%, var(--secondary-color)20 100%);
   border-radius: 50%;
   font-size: 2.5rem;
 
@@ -68,13 +64,14 @@ const IconContainer = styled.div`
 const CategoryName = styled.span`
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text-color);
   margin-bottom: 0.75rem;
 `;
 
 const CategoryDescription = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-color);
+  opacity: 0.7;
   margin: 0;
   line-height: 1.4;
 
@@ -83,61 +80,19 @@ const CategoryDescription = styled.p`
   }
 `;
 
-const CategoryList = ({ onCategorySelect }) => {
-  const categories = [
-    {
-      id: 'shopping',
-      name: 'Shopping',
-      icon: '🛍️',
-      description: 'Maximize cashback on Amazon, Flipkart & other online shopping',
-      mobileDescription: 'Best rewards on online shopping'
-    },
-    {
-      id: 'online-food-ordering',
-      name: 'Online Food',
-      icon: '🍕',
-      description: 'Best rewards on Swiggy, Zomato & other food delivery',
-      mobileDescription: 'Rewards on food delivery'
-    },
-    {
-      id: 'travel',
-      name: 'Travel',
-      icon: '✈️',
-      description: 'Best rewards on flights, hotels and travel bookings',
-      mobileDescription: 'Rewards on flights & hotels'
-    },
-    {
-      id: 'dining',
-      name: 'Dining',
-      icon: '🍽️',
-      description: 'Extra rewards on restaurant bills and food delivery',
-      mobileDescription: 'Rewards on dining & delivery'
-    },
-    {
-      id: 'grocery',
-      name: 'Grocery',
-      icon: '🛒',
-      description: 'Earn rewards on grocery shopping online & offline',
-      mobileDescription: 'Rewards on grocery shopping'
-    },
-    {
-      id: 'bills',
-      name: 'Utility Bills',
-      icon: '📱',
-      description: 'Rewards on electricity, mobile & other bill payments',
-      mobileDescription: 'Rewards on bill payments'
-    },
-    {
-      id: 'fuel',
-      name: 'Fuel',
-      icon: '⛽',
-      description: 'Save on fuel purchases at any petrol pump',
-      mobileDescription: 'Save on fuel'
-    }
-  ];
+// Reverted: Categories defined internally again
+const categoriesData = [
+    { id: 'shopping', name: 'Shopping', icon: '🛍️', description: 'Maximize cashback on Amazon, Flipkart & other online shopping', mobileDescription: 'Best rewards on online shopping' },
+    { id: 'online-food-ordering', name: 'Online Food', icon: '🍕', description: 'Best rewards on Swiggy, Zomato & other food delivery', mobileDescription: 'Rewards on food delivery' },
+    { id: 'travel', name: 'Travel', icon: '✈️', description: 'Best rewards on flights, hotels and travel bookings', mobileDescription: 'Rewards on flights & hotels' },
+    { id: 'dining', name: 'Dining', icon: '🍽️', description: 'Extra rewards on restaurant bills and food delivery', mobileDescription: 'Rewards on dining & delivery' },
+    { id: 'grocery', name: 'Grocery', icon: '🛒', description: 'Earn rewards on grocery shopping online & offline', mobileDescription: 'Rewards on grocery shopping' },
+    { id: 'bills', name: 'Utility Bills', icon: '📱', description: 'Rewards on electricity, mobile & other bill payments', mobileDescription: 'Rewards on bill payments' },
+    { id: 'fuel', name: 'Fuel', icon: '⛽', description: 'Save on fuel purchases at any petrol pump', mobileDescription: 'Save on fuel' }
+];
 
+const CategoryList = ({ onCategorySelect }) => {
   const handleCategoryClick = (categoryId) => {
-    console.log('Category selected:', categoryId);
     onCategorySelect(categoryId);
   };
 
@@ -145,7 +100,7 @@ const CategoryList = ({ onCategorySelect }) => {
     <Container>
       <Title>Choose Your Primary Spending Category</Title>
       <Grid>
-        {categories.map(category => (
+        {categoriesData.map(category => (
           <CategoryCard
             key={category.id}
             onClick={() => handleCategoryClick(category.id)}

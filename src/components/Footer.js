@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 const FooterContainer = styled.footer`
-  background: white;
+  background: var(--light-gray);
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
 `;
 
 const FooterText = styled.p`
-  color: #666;
+  color: var(--text-color);
   margin: 0;
   font-size: 0.9rem;
 `;
@@ -17,7 +17,7 @@ const FooterText = styled.p`
 const Footer = () => {
   return (
     <FooterContainer>
-      <FooterText>© 2024 MagicPin. All rights reserved.</FooterText>
+      <FooterText>© {new Date().getFullYear()} Tide. All rights reserved. Credit Card Calculator.</FooterText>
     </FooterContainer>
   );
 };

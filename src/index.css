@@ -12,14 +12,20 @@ body {
 }
 
 :root {
-  --primary-color: #2e108e;
-  --primary-light: #3f1cb8;
-  --secondary-color: #ef1c71;
-  --text-color: #ffffff;
-  --light-gray: #e9ecef;
+  --primary-color: #0c169a; /* Updated Tide Blue */
+  --primary-light: #4a53c0; /* Lighter shade of primary for hovers, etc. */
+  --secondary-color: #4F46E5; /* Reverted to previous Bright Blue/Indigo */
+  --accent-orange: #fd7e14; /* Orange for accents like in screenshot */
+  --text-color: #1F2937; /* Dark Gray */
+  --text-secondary-color: #6B7280; /* Medium Gray for text */
+  --text-on-dark-bg: #FFFFFF; /* White */
+  --light-gray: #F3F4F6; /* Very Light Gray for backgrounds */
+  --medium-gray: #D1D5DB; /* Medium Gray for borders */
   --border-radius: 8px;
-  --shadow: 0 4px 8px rgba(46, 16, 142, 0.2);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s ease;
+  --success-color: #10B981; /* Green */
+  --error-color: #EF4444; /* Red */
 }
 
 @media (max-width: 768px) {

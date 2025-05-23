@@ -21,7 +21,7 @@ const LogoContainer = styled.div`
 const Logo = () => {
   return (
     <LogoContainer>
-      <img src="/magicpin-logo.png" alt="MagicPin" />
+      <img src="/tide-logo.svg" alt="Tide" />
     </LogoContainer>
   );
 };

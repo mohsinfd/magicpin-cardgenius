@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import LoadingScreen from './LoadingScreen';
+import EligibilityModal from './EligibilityModal';
 import { isAuthenticated } from '../utils/auth';
 import { toast } from 'react-hot-toast';
 
+const APPLY_NOW_TEXT = 'Apply Now';
+
 const ApplyButton = styled.a`
-  background: ${props => props.$hollow ? 'transparent' : '#ef1c71'};
-  color: ${props => props.$hollow ? '#ef1c71' : 'white'};
-  border: 2px solid #ef1c71;
+  background: ${props => props.$hollow ? 'transparent' : 'var(--secondary-color)'};
+  color: ${props => props.$hollow ? 'var(--secondary-color)' : 'var(--text-on-dark-bg)'};
+  border: 2px solid var(--secondary-color);
   display: inline-block;
   padding: 0.8rem 1.5rem;
   border-radius: 6px;
@@ -24,8 +27,8 @@ const ApplyButton = styled.a`
   }
 
   &:hover {
-    background: ${props => props.$hollow ? '#ef1c71' : '#ff3b8b'};
-    color: white;
+    background: ${props => props.$hollow ? 'var(--secondary-color)' : 'var(--primary-light)'};
+    color: var(--text-on-dark-bg);
   }
 `;
 
@@ -41,6 +44,7 @@ const Container = styled.div`
   padding: 2rem 1rem;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  background-color: var(--light-gray);
   
   @media (max-width: 480px) {
     padding: 1rem;
@@ -62,21 +66,21 @@ const BackButton = styled.button`
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #2e108e;
+  color: var(--primary-color);
   display: flex;
   align-items: center;
   padding: 0.5rem;
   border-radius: var(--border-radius);
   
   &:hover {
-    background-color: rgba(46, 16, 142, 0.1);
+    background-color: var(--medium-gray);
   }
 `;
 
 const Title = styled.h2`
   margin: 0 auto 0 1rem;
   font-size: 1.6rem;
-  color: #2e108e;
+  color: var(--primary-color);
   
   @media (max-width: 768px) {
     font-size: 1.4rem;
@@ -90,7 +94,7 @@ const TopCardsSection = styled.section`
 const SectionTitle = styled.h3`
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  color: var(--text-color);
+  color: var(--primary-color);
 `;
 
 const CardImage = styled.img`
@@ -98,7 +102,7 @@ const CardImage = styled.img`
   height: 180px;
   object-fit: contain;
   margin-bottom: 0.5rem;
-  background: #f8f9fa;
+  background: var(--light-gray);
   
   @media (min-width: 768px) {
     height: 200px;
@@ -110,8 +114,8 @@ const JoiningFeeLabel = styled.div`
   bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-on-dark-bg);
   padding: 4px 12px;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -124,14 +128,14 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(46, 16, 142, 0.1);
-  transition: transform 0.2s ease;
-  color: #333;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  color: var(--text-color);
   
   ${props => props.$isTopCard && `
-    border: 2px solid #ef1c71;
+    border: 2px solid var(--secondary-color);
     
     @media (min-width: 768px) {
       display: flex;
@@ -154,7 +158,7 @@ const CardContainer = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(46, 16, 142, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 `;
 
@@ -168,7 +172,7 @@ const CardHeader = styled.div`
 const CardTitle = styled.h3`
   margin: 0;
   font-size: 1.4rem;
-  color: #ef1c71;
+  color: var(--secondary-color);
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
@@ -178,7 +182,7 @@ const CardTitle = styled.h3`
     text-decoration: inherit;
     
     &:hover {
-      color: #ff3b8b;
+      color: var(--primary-light);
     }
   }
   
@@ -234,11 +238,11 @@ const CardItem = styled.div`
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 16px;
+  border-radius: var(--border-radius);
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: ${props => props.rank <= 3 ? `2px solid ${props.rank === 1 ? '#febd69' : props.rank === 2 ? '#37475a' : '#232f3e'}` : 'none'};
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border: ${props => props.rank <= 3 ? `2px solid ${props.rank === 1 ? 'var(--accent-orange)' : props.rank === 2 ? 'var(--secondary-color)' : 'var(--primary-light)'}` : '1px solid var(--medium-gray)'};
   position: relative;
   overflow: hidden;
   text-decoration: none;
@@ -350,6 +354,7 @@ const BenefitIcon = styled.span`
   font-size: 1.2rem;
   color: #ef1c71;
   margin-right: 0.5rem;
+  flex-shrink: 0;
 `;
 
 const NoResultsMessage = styled.div`
@@ -367,10 +372,15 @@ const LoadingMessage = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  text-align: center;
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
   color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #d32f2f;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 600px;
+  box-shadow: var(--shadow);
 `;
 
 const CardSavings = styled.div`
@@ -415,11 +425,105 @@ const BenefitsList = styled.ul`
   margin: 0;
 `;
 
+const ResultsHeader = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const ResultsTitle = styled.h1`
+  font-size: 2.2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+`;
+
+const ResultsSubtitle = styled.p`
+  font-size: 1.1rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  max-width: 700px;
+  margin: 0 auto 1.5rem auto;
+`;
+
+const BenefitText = styled.span`
+  font-size: 1.05rem;
+  color: var(--text-color-light);
+  line-height: 1.4;
+  display: inline;
+`;
+
+const NewBenefitsSectionTitle = styled.h4`
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+`;
+
+const BenefitListItemStyled = styled.li`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const BenefitCheckmarkIcon = styled.span`
+  color: var(--accent-green);
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  line-height: 1.3;
+`;
+
+const BenefitDetailStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const BenefitHeaderStyled = styled.span`
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  display: block;
+  line-height: 1.3;
+`;
+
+const BenefitDescriptionStyled = styled.span`
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+  line-height: 1.4;
+  display: block;
+`;
+
+const SingleLineBenefitStyled = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-color-light);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+    ${BenefitCheckmarkIcon} {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+`;
+
+const BenefitContainer = styled.div`
+  margin-top: 1rem;
+`;
+
 const CardResults = ({ cards, onReset, isLoading, error, category, formData, onAuthClick, isAuthenticated, isAmazonOnly, tagId, maxUsps }) => {
   console.log('CardResults received cards:', cards);
   const [visibleCards, setVisibleCards] = useState([]);
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
-  
+  const [showEligibilityModal, setShowEligibilityModal] = useState(false);
+  const [selectedCardForEligibility, setSelectedCardForEligibility] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCardForModal, setSelectedCardForModal] = useState(null);
+  const [showAllCards, setShowAllCards] = useState(false);
+  const [visibleItems, setVisibleItems] = useState({});
+
+  const isGenericAllCardsView = category === 'All Available Cards';
+
   useEffect(() => {
     if (isLoading) {
       setShowLoadingScreen(true);
@@ -434,11 +538,9 @@ const CardResults = ({ cards, onReset, isLoading, error, category, formData, onA
     setShowLoadingScreen(false);
   };
 
-  const getCategoryTitle = (category, isAmazonOnly) => {
-    if (isAmazonOnly) {
-      return 'Amazon Shopping';
-    }
-
+  const getCategoryTitle = (cat, isGeneric) => {
+    if (isGeneric) return 'All Tide Cards';
+    if (!cat) return 'Card Recommendations';
     const categoryTitles = {
       'shopping': 'Shopping',
       'travel': 'Travel',
@@ -448,12 +550,38 @@ const CardResults = ({ cards, onReset, isLoading, error, category, formData, onA
       'fuel': 'Fuel',
       'online-food-ordering': 'Online Food Ordering'
     };
-    return categoryTitles[category] || category;
+    const titleMap = {
+      'shopping': 'Shopping',
+      'travel': 'Travel',
+      'fuel': 'Fuel',
+      'dining': 'Dining',
+      'grocery': 'Grocery',
+      'bills': 'Utility Bills',
+      'online-food-ordering': 'Online Food Ordering',
+      default: cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')
+    };
+    return titleMap[cat] || titleMap.default;
   };
 
-  const calculateTotalSpend = (formData) => {
-    if (!formData) return 0;
-    return Object.values(formData).reduce((sum, value) => sum + (Number(value) || 0), 0);
+  const calculateTotalSpend = (currentFormData) => {
+    if (!currentFormData || Object.keys(currentFormData).length === 0) return 0;
+    return Object.values(currentFormData).reduce((sum, value) => sum + (parseInt(value) || 0), 0);
+  };
+
+  const handleApplyNowClick = (card) => {
+    setSelectedCardForEligibility(card);
+    setShowEligibilityModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowEligibilityModal(false);
+    setSelectedCardForEligibility(null);
+  };
+
+  const handleEligibleAndApply = (networkUrl) => {
+    window.open(networkUrl, '_blank', 'noopener,noreferrer');
+    setShowEligibilityModal(false);
+    setSelectedCardForEligibility(null);
   };
 
   if (showLoadingScreen) {
@@ -491,143 +619,167 @@ const CardResults = ({ cards, onReset, isLoading, error, category, formData, onA
     return categoryTitles[category] || 0;
   };
 
-  const renderBenefits = (card) => {
-    const categoryBenefits = card.product_usps
-      ?.filter(benefit => !tagId || benefit.tag_id === tagId)
-      ?.sort((a, b) => a.priority - b.priority) || [];
+  const totalSpend = calculateTotalSpend(formData);
 
-    const benefitsToShow = maxUsps ? categoryBenefits.slice(0, maxUsps) : categoryBenefits;
+  // Titles for Spend-Based View
+  const spendBasedPageTitle = `Recommendations for ${getCategoryTitle(category)} Spends`;
+  const spendBasedResultsTitle = `Credit Cards for ${getCategoryTitle(category)}`;
 
-    if (benefitsToShow.length === 0) {
-      return (
-        <BenefitItem>
-          <BenefitHeader>
-            <BenefitIcon>✓</BenefitIcon>
-            Great all-round benefits
-          </BenefitHeader>
-        </BenefitItem>
-      );
+  // Titles for Generic View
+  const genericPageMainTitle = ""; // No main title in the top header for generic view
+  const genericResultsContentTitle = "Explore All Cards";
+  
+  // Determine the main title to display in the <Header><Title> component
+  const mainDisplayTitle = isGenericAllCardsView ? genericPageMainTitle : spendBasedPageTitle;
+  
+  // Determine the title for the <ResultsHeader><ResultsTitle> component
+  const resultsContentTitle = isGenericAllCardsView ? genericResultsContentTitle : spendBasedResultsTitle;
+
+  // Determine the subtitle for the <ResultsHeader><ResultsSubtitle> component
+  const resultsHeaderSubtitleText = isGenericAllCardsView 
+    ? "Sorted by our Recommendations" // Updated for generic view
+    : `Based on your total monthly spending of ₹${totalSpend.toLocaleString()}.`;
+
+  const renderBenefits = (card, isTopCard) => {
+    if (!card || !card.product_usps || card.product_usps.length === 0) {
+      return null; 
     }
 
-    return benefitsToShow.map((benefit, index) => (
-      <BenefitItem key={index}>
-        <BenefitHeader>
-          <BenefitIcon>✓</BenefitIcon>
-          {benefit.header}
-        </BenefitHeader>
-        <BenefitDescription>
-          {benefit.description}
-        </BenefitDescription>
-      </BenefitItem>
-    ));
+    let uspsToProcess = card.product_usps.map(usp => ({ 
+      ...usp, 
+      tag_id: parseInt(usp.tag_id, 10)
+    }));
+
+    const BENEFITS_LIMIT = 2;
+    let uspsToShow = [];
+
+    // Prioritize tag_id 0, then fill with others up to the limit
+    const tagZeroUsps = uspsToProcess.filter(usp => usp.tag_id === 0);
+    const nonTagZeroUsps = uspsToProcess.filter(usp => usp.tag_id !== 0);
+
+    uspsToShow = tagZeroUsps.slice(0, BENEFITS_LIMIT);
+    if (uspsToShow.length < BENEFITS_LIMIT) {
+      uspsToShow = uspsToShow.concat(nonTagZeroUsps.slice(0, BENEFITS_LIMIT - uspsToShow.length));
+    }
+    
+    if (uspsToShow.length === 0) {
+      return null;
+    }
+
+    // All cards (top and non-top, in both views) will use the detailed display
+    return (
+      <BenefitContainer>
+        {uspsToShow.map((usp, index) => (
+          <BenefitListItemStyled key={index}>
+            <BenefitCheckmarkIcon>✓</BenefitCheckmarkIcon>
+            <BenefitDetailStyled>
+              <BenefitHeaderStyled>{usp.header}</BenefitHeaderStyled>
+              <BenefitDescriptionStyled>{usp.description}</BenefitDescriptionStyled>
+            </BenefitDetailStyled>
+          </BenefitListItemStyled>
+        ))}
+      </BenefitContainer>
+    );
   };
 
-  const totalSpend = calculateTotalSpend(formData);
+  const renderCard = (card, index, isTopCard) => (
+    <CardContainer key={card.id} $isTopCard={isTopCard}>
+      <RankLabel rank={index + 1}>
+        {index === 0 ? 'Best Card' : `#${index + 1}`}
+      </RankLabel>
+      <div style={{ position: 'relative' }}>
+        <CardImage
+          src={card.image}
+          alt={card.name}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/card-placeholder.png';
+          }}
+        />
+        <JoiningFeeLabel>
+          Joining Fee: ₹{card.joining_fee || 0}
+        </JoiningFeeLabel>
+      </div>
+      <CardHeader>
+        <CardTitle>
+          <a href={card.network_url} target="_blank" rel="noopener noreferrer">
+            {card.name}
+          </a>
+        </CardTitle>
+      </CardHeader>
+      <CardInfo>
+        <CardSavings>
+          {isGenericAllCardsView 
+            ? `Annual Card Savings: ₹${card.annual_saving.toLocaleString()}`
+            : `Your ${getCategoryTitle(category)} Savings: ₹${card.annual_saving.toLocaleString()}`}
+        </CardSavings>
+        <BenefitsList>
+          {renderBenefits(card, isTopCard)}
+        </BenefitsList>
+        <ApplyButton 
+          onClick={() => handleApplyNowClick(card)}
+        >
+          Apply Now
+        </ApplyButton>
+      </CardInfo>
+    </CardContainer>
+  );
 
   return (
     <Container>
       <Header>
-        <BackButton onClick={onReset}>←</BackButton>
+        <BackButton onClick={onReset} aria-label="Go back">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" fill="currentColor"/>
+          </svg>
+           Back
+        </BackButton>
         <Title>
-          MagicPin Recommendations for your {getCategoryTitle(category, isAmazonOnly)} spends of ₹{totalSpend.toLocaleString()}
+          {mainDisplayTitle}
+          {/* Show spends subtitle only for spend-based recommendations and if formData is present */}
+          {!isGenericAllCardsView && formData && Object.keys(formData).length > 0 && (
+            <span style={{ fontSize: '1rem', color: 'var(--text-secondary-color)', display: 'block', marginTop: '0.25rem' }}>
+              Spends of ₹{totalSpend.toLocaleString()}
+            </span>
+          )}
         </Title>
       </Header>
       
+      {isLoading && <LoadingScreen />}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {!isLoading && !error && cards.length > 0 && (
+        <>
+          <ResultsHeader>
+            <ResultsTitle>{resultsContentTitle}</ResultsTitle>
+            <ResultsSubtitle>{resultsHeaderSubtitleText}</ResultsSubtitle>
+          </ResultsHeader>
           <TopCardsSection>
-        <SectionTitle>Top Picks</SectionTitle>
+            <SectionTitle>Top Picks</SectionTitle>
             <TopCardsScroll>
-          {visibleCards.slice(0, 3).map((card, index) => (
-            <CardContainer key={card.id} $isTopCard={true}>
-              <RankLabel rank={index + 1}>
-                {index === 0 ? 'Best Card' : `#${index + 1}`}
-              </RankLabel>
-              <div style={{ position: 'relative' }}>
-                <CardImage
-                  src={card.image}
-                  alt={card.name}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = '/card-placeholder.png';
-                  }}
-                />
-                <JoiningFeeLabel>
-                  Joining Fee: ₹{card.joining_fee || 0}
-                </JoiningFeeLabel>
-              </div>
-              <CardHeader>
-                <CardTitle>
-                  <a href={card.network_url} target="_blank" rel="noopener noreferrer">
-                    {card.name}
-                  </a>
-                </CardTitle>
-              </CardHeader>
-              <CardInfo>
-                <CardSavings>
-                  Your {getCategoryTitle(category, isAmazonOnly)} Savings: ₹{card.annual_saving.toLocaleString()}
-                </CardSavings>
-                <BenefitsList>
-                  {renderBenefits(card)}
-                </BenefitsList>
-                <ApplyButton 
-                  href={card.network_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Apply Now
-                </ApplyButton>
-              </CardInfo>
-            </CardContainer>
-          ))}
+              {visibleCards.slice(0, 3).map((card, index) => (
+                renderCard(card, index, true)
+              ))}
             </TopCardsScroll>
           </TopCardsSection>
           
-            <RemainingCardsSection>
-        <SectionTitle>More Options</SectionTitle>
-              <CardsList>
-          {visibleCards.slice(3).map((card, index) => (
-            <CardContainer key={card.id} $isTopCard={false}>
-              <div style={{ position: 'relative' }}>
-                <CardImage
-                  src={card.image}
-                  alt={card.name}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = '/card-placeholder.png';
-                  }}
-                />
-                <JoiningFeeLabel>
-                  Joining Fee: ₹{card.joining_fee || 0}
-                </JoiningFeeLabel>
-              </div>
-              <CardHeader>
-                <CardTitle>
-                  <a href={card.network_url} target="_blank" rel="noopener noreferrer">
-                    {card.name}
-                  </a>
-                </CardTitle>
-              </CardHeader>
-              <CardInfo>
-                <CardSavings>
-                  Your {getCategoryTitle(category, isAmazonOnly)} Savings: ₹{card.annual_saving.toLocaleString()}
-                </CardSavings>
-                <BenefitsList>
-                  {renderBenefits(card)}
-                </BenefitsList>
-                <ApplyButton 
-                  href={card.network_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  $hollow={true}
-                >
-                  Apply Now
-                </ApplyButton>
-              </CardInfo>
-            </CardContainer>
-          ))}
-              </CardsList>
-            </RemainingCardsSection>
+          <RemainingCardsSection>
+            <SectionTitle>More Options</SectionTitle>
+            <CardsList>
+              {visibleCards.slice(3).map((card, index) => (
+                renderCard(card, index, false)
+              ))}
+            </CardsList>
+          </RemainingCardsSection>
+        </>
+      )}
+      {showEligibilityModal && selectedCardForEligibility && (
+        <EligibilityModal 
+          card={selectedCardForEligibility} 
+          onClose={handleCloseModal} 
+          onEligibleAndApply={handleEligibleAndApply} 
+        />
+      )}
     </Container>
   );
 };
